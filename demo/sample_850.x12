@@ -1,0 +1,31 @@
+ISA*00*          *00*          *ZZ*BIGBOXRETAIL    *ZZ*ACMEMFG        *240115*1030*^*00501*000000001*0*P*>~
+GS*PO*BIGBOXRETAIL*ACMEMFG*20240115*1030*1*X*005010~
+ST*850*0001~
+BEG*00*SA*BB-20240115-001**20240115~
+REF*DP*DEPT-42~
+REF*PD*PO-SEASON-SPRING24~
+DTM*002*20240125~
+DTM*010*20240115~
+N1*ST*Big Box Retail Distribution Center*92*BIGBOX-DC-01~
+N3*1000 Commerce Parkway~
+N4*Memphis*TN*38101~
+N1*BY*Big Box Retail Inc.*92*BIGBOX-HQ~
+N3*500 Retail Tower Drive*Suite 200~
+N4*Dallas*TX*75201~
+N1*SE*ACME Manufacturing*92*ACMEMFG~
+N3*200 Industrial Boulevard~
+N4*Cleveland*OH*44101~
+PO1*1*500*EA*24.99**BP*FOAM-QN-10*VP*BB-SKU-90012*PD*Memory Foam Queen 10 Inch~
+PID*F****Memory Foam Queen Mattress 10 Inch~
+PO4*1*1*CA~
+PO1*2*250*EA*19.99**BP*FOAM-TW-8*VP*BB-SKU-90013*PD*Memory Foam Twin 8 Inch~
+PID*F****Memory Foam Twin Mattress 8 Inch~
+PO4*1*1*CA~
+PO1*3*100*EA*34.99**BP*HYBRID-KG-12*VP*BB-SKU-90014*PD*Hybrid King 12 Inch~
+PID*F****Hybrid King Mattress 12 Inch~
+PO4*1*1*CA~
+CTT*3*850~
+AMT*TT*19372.50~
+SE*29*0001~
+GE*1*1~
+IEA*1*000000001~
