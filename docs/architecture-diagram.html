@@ -1,0 +1,333 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FirstPass EDI — System Architecture</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f8fafc;
+    --fg: #172033;
+    --muted: #5b6475;
+    --line: #64748b;
+    --neutral: #e2e8f0;
+    --input: #bfdbfe;
+    --process: #c7d2fe;
+    --storage: #99f6e4;
+    --external: #fde68a;
+    --risk: #fecaca;
+    --accent: #818cf8;
+    --safety: #fca5a5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e5e7eb;
+      --muted: #a3adbd;
+      --line: #94a3b8;
+      --neutral: #334155;
+      --input: #1d4ed8;
+      --process: #4338ca;
+      --storage: #0f766e;
+      --external: #92400e;
+      --risk: #991b1b;
+      --accent: #6366f1;
+      --safety: #b91c1c;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  main {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 20px;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .title { font-size: 20px; font-weight: 700; fill: var(--fg); }
+  .subtitle { font-size: 13px; fill: var(--muted); }
+  .label { font-size: 13px; font-weight: 600; fill: var(--fg); }
+  .small { font-size: 11px; fill: var(--muted); }
+  .tiny { font-size: 10px; fill: var(--muted); }
+  .node { stroke: var(--line); stroke-width: 1; }
+  .neutral { fill: var(--neutral); }
+  .input { fill: var(--input); }
+  .process { fill: var(--process); }
+  .storage { fill: var(--storage); }
+  .external { fill: var(--external); }
+  .risk { fill: var(--risk); }
+  .edge { stroke: var(--line); stroke-width: 1.5; fill: none; }
+  .edge-bold { stroke: var(--accent); stroke-width: 2; fill: none; }
+  .zone { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 6 5; opacity: 0.7; }
+  .zone-label { font-size: 11px; font-weight: 700; fill: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+</style>
+<main>
+<svg viewBox="0 0 1060 820" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="var(--line)" />
+    </marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="var(--accent)" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="530" y="30" text-anchor="middle" class="title">FirstPass EDI — System Architecture</text>
+  <text x="530" y="48" text-anchor="middle" class="subtitle">AI-Powered EDI Operations Platform • Multi-Agent Architecture</text>
+
+  <!-- ═══════════ LAYER 1: API + DASHBOARD ═══════════ -->
+  <g>
+    <rect x="140" y="65" width="780" height="58" rx="6" class="node input" />
+    <text x="530" y="88" text-anchor="middle" class="label">FastAPI REST Layer</text>
+    <text x="530" y="104" text-anchor="middle" class="small">/health  /cycle  /halt  /edi/*  /api/dashboard/*  /api/intelligence/*  /api/validate/*  /api/pipeline/*</text>
+  </g>
+
+  <!-- Edge: API → Orchestrator -->
+  <path d="M530,123 L530,148" class="edge" marker-end="url(#arrow)" />
+
+  <!-- ═══════════ LAYER 2: ORCHESTRATOR ═══════════ -->
+  <g>
+    <rect x="340" y="150" width="380" height="48" rx="6" class="node process" />
+    <text x="530" y="172" text-anchor="middle" class="label">🎯 Orchestrator</text>
+    <text x="530" y="187" text-anchor="middle" class="small">Coordinates agents • Manages cycles • Publishes results</text>
+  </g>
+
+  <!-- Edges: Orchestrator → Agents -->
+  <path d="M410,198 L200,240" class="edge-bold" marker-end="url(#arrow-accent)" />
+  <path d="M470,198 L400,240" class="edge-bold" marker-end="url(#arrow-accent)" />
+  <path d="M590,198 L660,240" class="edge-bold" marker-end="url(#arrow-accent)" />
+  <path d="M650,198 L860,240" class="edge-bold" marker-end="url(#arrow-accent)" />
+
+  <!-- ═══════════ LAYER 3: AGENTS ═══════════ -->
+  <!-- Agent zone -->
+  <rect x="70" y="232" width="920" height="80" rx="8" class="zone" />
+  <text x="88" y="248" class="zone-label">Autonomous Agents</text>
+
+  <!-- EDI Agent -->
+  <g>
+    <rect x="100" y="255" width="180" height="48" rx="5" class="node process" />
+    <text x="190" y="275" text-anchor="middle" class="label">📥 EDI Agent</text>
+    <text x="190" y="292" text-anchor="middle" class="tiny">Parse 850 • Generate 855/997</text>
+  </g>
+
+  <!-- Inbox Agent -->
+  <g>
+    <rect x="310" y="255" width="180" height="48" rx="5" class="node process" />
+    <text x="400" y="275" text-anchor="middle" class="label">📬 Inbox Agent</text>
+    <text x="400" y="292" text-anchor="middle" class="tiny">Triage emails • Route intents</text>
+  </g>
+
+  <!-- Audit Agent -->
+  <g>
+    <rect x="570" y="255" width="180" height="48" rx="5" class="node process" />
+    <text x="660" y="275" text-anchor="middle" class="label">🔍 Audit Agent</text>
+    <text x="660" y="292" text-anchor="middle" class="tiny">Compliance • SLA monitoring</text>
+  </g>
+
+  <!-- Watchdog Agent -->
+  <g>
+    <rect x="780" y="255" width="180" height="48" rx="5" class="node process" />
+    <text x="870" y="275" text-anchor="middle" class="label">🏥 Watchdog</text>
+    <text x="870" y="292" text-anchor="middle" class="tiny">Health scoring • Self-heal</text>
+  </g>
+
+  <!-- ═══════════ MESSAGE BUS (horizontal bar) ═══════════ -->
+  <g>
+    <rect x="100" y="330" width="860" height="28" rx="4" class="node neutral" />
+    <text x="530" y="349" text-anchor="middle" class="label">⇌ Message Bus — File-backed pub/sub • Pattern matching • Dead-letter queue • 24h TTL</text>
+  </g>
+
+  <!-- Edges: Agents → Message Bus -->
+  <path d="M190,303 L190,330" class="edge" marker-end="url(#arrow)" />
+  <path d="M400,303 L400,330" class="edge" marker-end="url(#arrow)" />
+  <path d="M660,303 L660,330" class="edge" marker-end="url(#arrow)" />
+  <path d="M870,303 L870,330" class="edge" marker-end="url(#arrow)" />
+
+  <!-- ═══════════ LAYER 4: INTELLIGENCE ═══════════ -->
+  <!-- Intelligence zone -->
+  <rect x="70" y="378" width="600" height="100" rx="8" class="zone" />
+  <text x="88" y="394" class="zone-label">Intelligence Layer</text>
+
+  <!-- Risk Scoring -->
+  <g>
+    <rect x="100" y="402" width="165" height="65" rx="5" class="node external" />
+    <text x="182" y="424" text-anchor="middle" class="label">⚠️ Risk Scoring</text>
+    <text x="182" y="440" text-anchor="middle" class="tiny">Doc failure rate (40%)</text>
+    <text x="182" y="452" text-anchor="middle" class="tiny">SLA • Chargebacks • Trends</text>
+  </g>
+
+  <!-- Analytics Engine -->
+  <g>
+    <rect x="285" y="402" width="165" height="65" rx="5" class="node external" />
+    <text x="367" y="424" text-anchor="middle" class="label">📊 Analytics</text>
+    <text x="367" y="440" text-anchor="middle" class="tiny">Pattern detection</text>
+    <text x="367" y="452" text-anchor="middle" class="tiny">Anomaly flagging</text>
+  </g>
+
+  <!-- Briefing Generator -->
+  <g>
+    <rect x="470" y="402" width="165" height="65" rx="5" class="node external" />
+    <text x="552" y="424" text-anchor="middle" class="label">📝 Briefing</text>
+    <text x="552" y="440" text-anchor="middle" class="tiny">AI-generated summaries</text>
+    <text x="552" y="452" text-anchor="middle" class="tiny">Adaptive to reader</text>
+  </g>
+
+  <!-- ═══════════ LAYER 4b: VALIDATORS ═══════════ -->
+  <rect x="700" y="378" width="290" height="100" rx="8" class="zone" />
+  <text x="718" y="394" class="zone-label">Validators</text>
+
+  <!-- Spec Parser -->
+  <g>
+    <rect x="715" y="402" width="125" height="65" rx="5" class="node input" />
+    <text x="777" y="424" text-anchor="middle" class="label">📄 Spec Parser</text>
+    <text x="777" y="440" text-anchor="middle" class="tiny">PDF routing guides</text>
+    <text x="777" y="452" text-anchor="middle" class="tiny">→ structured specs</text>
+  </g>
+
+  <!-- X12 Validator -->
+  <g>
+    <rect x="852" y="402" width="125" height="65" rx="5" class="node input" />
+    <text x="914" y="424" text-anchor="middle" class="label">✅ X12 Validator</text>
+    <text x="914" y="440" text-anchor="middle" class="tiny">Segment-level</text>
+    <text x="914" y="452" text-anchor="middle" class="tiny">850/856/810/846</text>
+  </g>
+
+  <!-- ═══════════ LAYER 5: MEMORY + PIPELINE ═══════════ -->
+  <!-- Memory zone -->
+  <rect x="70" y="500" width="445" height="100" rx="8" class="zone" />
+  <text x="88" y="516" class="zone-label">Knowledge &amp; Memory (RAG)</text>
+
+  <!-- Corporate Memory -->
+  <g>
+    <rect x="100" y="524" width="155" height="65" rx="5" class="node storage" />
+    <text x="177" y="546" text-anchor="middle" class="label">🧠 Corp Memory</text>
+    <text x="177" y="560" text-anchor="middle" class="tiny">Remember / Recall</text>
+    <text x="177" y="572" text-anchor="middle" class="tiny">Vector search (RAG)</text>
+  </g>
+
+  <!-- Issue Tracker -->
+  <g>
+    <rect x="270" y="524" width="155" height="65" rx="5" class="node storage" />
+    <text x="347" y="546" text-anchor="middle" class="label">🎫 Issue Tracker</text>
+    <text x="347" y="560" text-anchor="middle" class="tiny">Open → Investigate</text>
+    <text x="347" y="572" text-anchor="middle" class="tiny">→ Resolve / Escalate</text>
+  </g>
+
+  <!-- Embedding Engine (small) -->
+  <g>
+    <rect x="440" y="535" width="60" height="46" rx="4" class="node storage" />
+    <text x="470" y="556" text-anchor="middle" class="tiny" style="font-weight:600">🔤</text>
+    <text x="470" y="569" text-anchor="middle" class="tiny">Embed</text>
+  </g>
+
+  <!-- Pipeline zone -->
+  <rect x="545" y="500" width="445" height="100" rx="8" class="zone" />
+  <text x="563" y="516" class="zone-label">Order Pipeline</text>
+
+  <!-- Order Pipeline -->
+  <g>
+    <rect x="570" y="524" width="185" height="65" rx="5" class="node process" />
+    <text x="662" y="546" text-anchor="middle" class="label">🔄 Order Pipeline</text>
+    <text x="662" y="560" text-anchor="middle" class="tiny">850 → 855 → 856 → 810</text>
+    <text x="662" y="572" text-anchor="middle" class="tiny">End-to-end processing</text>
+  </g>
+
+  <!-- Reconciliation -->
+  <g>
+    <rect x="775" y="524" width="185" height="65" rx="5" class="node process" />
+    <text x="867" y="546" text-anchor="middle" class="label">🔗 Reconciliation</text>
+    <text x="867" y="560" text-anchor="middle" class="tiny">Cross-system matching</text>
+    <text x="867" y="572" text-anchor="middle" class="tiny">Orderful ↔ ERP ↔ Ship</text>
+  </g>
+
+  <!-- Edges: Intelligence → Memory -->
+  <path d="M182,467 L177,524" class="edge" marker-end="url(#arrow)" />
+  <path d="M367,467 L347,524" class="edge" marker-end="url(#arrow)" />
+
+  <!-- ═══════════ LAYER 6: CONNECTORS ═══════════ -->
+  <!-- Connector zone -->
+  <rect x="70" y="625" width="920" height="80" rx="8" class="zone" />
+  <text x="88" y="641" class="zone-label">External Connectors</text>
+
+  <!-- Orderful -->
+  <g>
+    <rect x="100" y="649" width="155" height="46" rx="5" class="node neutral" />
+    <text x="177" y="669" text-anchor="middle" class="label">Orderful</text>
+    <text x="177" y="683" text-anchor="middle" class="tiny">EDI network API (X12)</text>
+  </g>
+
+  <!-- LogicBroker -->
+  <g>
+    <rect x="275" y="649" width="155" height="46" rx="5" class="node neutral" />
+    <text x="352" y="669" text-anchor="middle" class="label">LogicBroker</text>
+    <text x="352" y="683" text-anchor="middle" class="tiny">Dropship / marketplace</text>
+  </g>
+
+  <!-- ShipStation -->
+  <g>
+    <rect x="450" y="649" width="155" height="46" rx="5" class="node neutral" />
+    <text x="527" y="669" text-anchor="middle" class="label">ShipStation</text>
+    <text x="527" y="683" text-anchor="middle" class="tiny">Fulfillment + tracking</text>
+  </g>
+
+  <!-- ERP -->
+  <g>
+    <rect x="625" y="649" width="155" height="46" rx="5" class="node neutral" />
+    <text x="702" y="669" text-anchor="middle" class="label">ERP (Sage 100)</text>
+    <text x="702" y="683" text-anchor="middle" class="tiny">Inventory + sales orders</text>
+  </g>
+
+  <!-- Supabase -->
+  <g>
+    <rect x="800" y="649" width="155" height="46" rx="5" class="node storage" />
+    <text x="877" y="669" text-anchor="middle" class="label">Supabase</text>
+    <text x="877" y="683" text-anchor="middle" class="tiny">pgvector + state store</text>
+  </g>
+
+  <!-- Edges: Pipeline → Connectors -->
+  <path d="M662,589 L530,649" class="edge" marker-end="url(#arrow)" />
+  <path d="M662,589 L700,649" class="edge" marker-end="url(#arrow)" />
+  <path d="M867,589 L530,649" class="edge" marker-end="url(#arrow)" />
+  <path d="M867,589 L700,649" class="edge" marker-end="url(#arrow)" />
+  <path d="M177,589 L177,649" class="edge" marker-end="url(#arrow)" />
+  <path d="M347,572 L352,649" class="edge" marker-end="url(#arrow)" />
+
+  <!-- ═══════════ SAFETY SIDEBAR ═══════════ -->
+  <rect x="70" y="730" width="920" height="70" rx="8" class="zone" style="stroke: var(--safety); stroke-width: 1.5;" />
+  <text x="88" y="748" class="zone-label" style="fill: var(--safety);">Safety Framework</text>
+
+  <!-- Guardrails -->
+  <g>
+    <rect x="100" y="755" width="200" height="36" rx="4" class="node risk" />
+    <text x="200" y="773" text-anchor="middle" class="label">🛡️ Guardrails</text>
+    <text x="200" y="785" text-anchor="middle" class="tiny">Value thresholds • Field validation</text>
+  </g>
+
+  <!-- Halt Switch -->
+  <g>
+    <rect x="325" y="755" width="200" height="36" rx="4" class="node risk" />
+    <text x="425" y="773" text-anchor="middle" class="label">🛑 HALT-ALL Switch</text>
+    <text x="425" y="785" text-anchor="middle" class="tiny">Instant agent suspension</text>
+  </g>
+
+  <!-- Escalation Gates -->
+  <g>
+    <rect x="550" y="755" width="200" height="36" rx="4" class="node risk" />
+    <text x="650" y="773" text-anchor="middle" class="label">🚨 Escalation Gates</text>
+    <text x="650" y="785" text-anchor="middle" class="tiny">Human-in-the-loop approval</text>
+  </g>
+
+  <!-- Remediation -->
+  <g>
+    <rect x="775" y="755" width="200" height="36" rx="4" class="node risk" />
+    <text x="875" y="773" text-anchor="middle" class="label">🔧 Remediation</text>
+    <text x="875" y="785" text-anchor="middle" class="tiny">Auto-fix safe • Escalate destructive</text>
+  </g>
+
+</svg>
+</main>
