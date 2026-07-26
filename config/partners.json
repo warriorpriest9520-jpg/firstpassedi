@@ -1,0 +1,19 @@
+{
+  "partners": {
+    "BIGBOXRETAIL": {
+      "name": "Big Box Retail",
+      "status": "active",
+      "isa_id": "BIGBOXRETAIL",
+      "doc_types": {
+        "850": {"required_segments": ["ISA", "GS", "ST", "BEG", "PO1", "CTT", "SE", "GE", "IEA"]},
+        "856": {"required_segments": ["ISA", "GS", "ST", "BSN", "HL", "SE", "GE", "IEA"]},
+        "810": {"required_segments": ["ISA", "GS", "ST", "BIG", "IT1", "TDS", "SE", "GE", "IEA"]}
+      }
+    },
+    "ACMEMFG": {
+      "name": "ACME Manufacturing",
+      "status": "active",
+      "isa_id": "ACMEMFG"
+    }
+  }
+}

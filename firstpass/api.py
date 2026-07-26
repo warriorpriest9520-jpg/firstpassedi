@@ -352,6 +352,77 @@ def write_file(req: FileWriteRequest):
     return {"ok": True, "path": req.path, "bytes_written": len(req.content)}
 
 
+# ── Dashboard + pipeline routes ──────────────────────────────────────────────
+
+try:
+    from .dashboard.routes import register_dashboard_routes
+    register_dashboard_routes(app)
+except Exception as exc:
+    log.warning(f"Dashboard routes not loaded: {exc}")
+
+try:
+    from .pipeline.order_pipeline import OrderPipeline
+    if hasattr(OrderPipeline, 'register_routes'):
+        OrderPipeline.register_routes(app)
+except Exception as exc:
+    log.warning(f"Pipeline routes not loaded: {exc}")
+
+try:
+    from .pipeline.reconciliation import Reconciler
+    if hasattr(Reconciler, 'register_routes'):
+        Reconciler.register_routes(app)
+except Exception as exc:
+    log.warning(f"Reconciliation routes not loaded: {exc}")
+
+
+# ── Intelligence endpoints ───────────────────────────────────────────────────
+
+@app.get("/api/intelligence/risk", dependencies=[Depends(verify_key)])
+def get_risk_scores():
+    """Current risk scores for all trading partners."""
+    try:
+        from .intelligence.risk_scoring import RiskScorer
+        scorer = RiskScorer()
+        return {"risk_scores": scorer.score_all_partners()}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+@app.post("/api/intelligence/briefing", dependencies=[Depends(verify_key)])
+def generate_briefing():
+    """Generate an AI-powered operations briefing."""
+    try:
+        from .intelligence.briefing import BriefingGenerator
+        gen = BriefingGenerator()
+        return {"briefing": gen.generate()}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+@app.get("/api/intelligence/memory/search")
+def search_memory(q: str, limit: int = 5):
+    """Search corporate memory / RAG knowledge store."""
+    try:
+        from .memory.corporate_memory import CorporateMemory
+        mem = CorporateMemory()
+        results = mem.recall(q, top_k=limit)
+        return {"query": q, "results": results}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+@app.post("/api/validate/x12", dependencies=[Depends(verify_key)])
+async def validate_x12(request: Request):
+    """Validate an X12 document against spec rules."""
+    body = await request.json()
+    x12_content = body.get("x12", "")
+    doc_type = body.get("doc_type", "850")
+    try:
+        from .validators.x12_validator import EDIValidator
+        validator = EDIValidator()
+        errors = validator.validate(x12_content, doc_type)
+        return {"valid": len(errors) == 0, "errors": errors, "doc_type": doc_type}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

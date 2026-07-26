@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "last_updated": "2026-07-26T09:32:01.254237",
+  "fact_count": 1,
+  "facts": {
+    "mem_20260726_0001": {
+      "id": "mem_20260726_0001",
+      "category": "domain_fact",
+      "topic": "PO-BB-20240115-001",
+      "content": "Processed PO BB-20240115-001 from BIGBOXRETAIL: 3 items, $20,991.50",
+      "confidence": 0.905,
+      "source": "demo",
+      "evidence_count": 2,
+      "tags": [
+        "demo",
+        "BIGBOXRETAIL"
+      ],
+      "first_seen": "2026-07-26T09:31:33.945281",
+      "last_confirmed": "2026-07-26T09:32:01.254221",
+      "last_contradicted": null,
+      "related_facts": [],
+      "metadata": {
+        "evidence_log": [
+          {
+            "timestamp": "2026-07-26T09:32:01.254230",
+            "evidence": "Processed PO BB-20240115-001 from BIGBOXRETAIL: 3 items, $20,991.50"
+          }
+        ]
+      }
+    }
+  }
+}

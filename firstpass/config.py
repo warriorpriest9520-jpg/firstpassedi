@@ -60,6 +60,21 @@ class _Config:
     POLL_INTERVAL_SECONDS: int = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))
     MAX_EMAILS_PER_CYCLE: int = int(os.getenv("MAX_EMAILS_PER_CYCLE", "50"))
 
+    # ── ERP / database ────────────────────────────────────────────────────
+    ERP_BASE_URL: str = os.getenv("ERP_BASE_URL", "")
+    ERP_DB_HOST: str = os.getenv("ERP_DB_HOST", "")
+    ERP_DB_NAME: str = os.getenv("ERP_DB_NAME", "")
+    ERP_DB_USER: str = os.getenv("ERP_DB_USER", "")
+    ERP_DB_PASSWORD: str = os.getenv("ERP_DB_PASSWORD", "")
+
+    # ── Data / state directories ──────────────────────────────────────────
+    DATA_DIR: Path = Path(os.getenv("FIRSTPASS_DATA_DIR", str(_root / "data")))
+    LOG_DIR: Path = Path(os.getenv("FIRSTPASS_LOG_DIR", str(_root / "logs")))
+
+    # ── Intelligence ──────────────────────────────────────────────────────
+    PARTNER_COUNT: int = int(os.getenv("FIRSTPASS_EDI_PARTNER_COUNT", "10"))
+    CALLBACK_URL: str = os.getenv("FIRSTPASS_CALLBACK_URL", "")
+
     # ── Safety ────────────────────────────────────────────────────────────
     HALT_FILE: Path = _root / ".halt_state.json"
     REQUIRE_APPROVAL_ABOVE_AMOUNT: float = float(
@@ -73,6 +88,10 @@ class _Config:
     @property
     def llm_configured(self) -> bool:
         return bool(self.ANTHROPIC_API_KEY or self.OPENAI_API_KEY)
+
+    @property
+    def erp_configured(self) -> bool:
+        return bool(self.ERP_DB_HOST and self.ERP_DB_NAME)
 
     def __repr__(self) -> str:
         return (

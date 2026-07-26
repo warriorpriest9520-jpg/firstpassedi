@@ -49,6 +49,18 @@ def _watchdog_agent():
     from .agents.watchdog_agent import WatchdogAgent
     return WatchdogAgent()
 
+def _risk_scorer():
+    from .intelligence.risk_scoring import RiskScorer
+    return RiskScorer()
+
+def _intelligence_engine():
+    from .intelligence.analytics import IntelligenceEngine
+    return IntelligenceEngine()
+
+def _briefing_generator():
+    from .intelligence.briefing import BriefingGenerator
+    return BriefingGenerator()
+
 
 class Orchestrator:
     """
@@ -110,6 +122,22 @@ class Orchestrator:
         except Exception as exc:
             log.error(f"Watchdog agent failed: {exc}", exc_info=True)
             results["agents"]["watchdog"] = {"error": str(exc)}
+
+        # 5. Risk scoring (runs after audit + watchdog feed data)
+        try:
+            scorer = _risk_scorer()
+            results["intelligence"] = {"risk": scorer.score_all_partners()}
+        except Exception as exc:
+            log.error(f"Risk scoring failed: {exc}", exc_info=True)
+            results["intelligence"] = {"risk": {"error": str(exc)}}
+
+        # 6. Intelligence analysis (pattern detection, anomaly flagging)
+        try:
+            engine = _intelligence_engine()
+            results["intelligence"]["analysis"] = engine.run_analysis()
+        except Exception as exc:
+            log.error(f"Intelligence engine failed: {exc}", exc_info=True)
+            results.setdefault("intelligence", {})["analysis"] = {"error": str(exc)}
 
         elapsed = time.time() - start
         self._last_cycle_at = datetime.now(timezone.utc).isoformat()
