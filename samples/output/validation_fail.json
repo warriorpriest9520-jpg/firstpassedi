@@ -1,0 +1,77 @@
+{
+  "document_id": "ASN20260901002",
+  "partner": "RetailerA",
+  "sender": "ACMESUPPLIER",
+  "status": "fail",
+  "timestamp": "2026-09-01T07:40:18Z",
+  "latency_seconds": 3.41,
+  "segments_checked": 12,
+  "structural_valid": true,
+  "spec_version": "RetailerA-2025-Q4",
+  "spec_days_old": 45,
+  "confidence": 0.91,
+  "routing_decision": "block_and_return",
+  "error_list": [
+    {
+      "severity": "error",
+      "segment": "DTM",
+      "qualifier_expected": "063",
+      "qualifier_found": null,
+      "description": "Required DTM*063 (Ship-By Date) is absent at the shipment HL level.",
+      "recommended_fix": "Insert DTM*063*YYYYMMDD immediately after DTM*011 within the HL*1 (Shipment) loop. Example: DTM*063*20260902",
+      "chargeback_risk": "RetailerA chargeback code CB-0042: Missing Ship-By Date — $250–$500 per ASN"
+    },
+    {
+      "severity": "warning",
+      "segment": "REF",
+      "qualifier_expected": "BM",
+      "qualifier_found": "ZZ",
+      "description": "REF qualifier 'ZZ' is non-standard. RetailerA expects 'BM' (Bill of Lading) for shipment-level REF segments.",
+      "recommended_fix": "Change REF*ZZ to REF*BM and supply a valid bill of lading number.",
+      "chargeback_risk": "Low — may cause ASN rejection on some RetailerA distribution center systems"
+    }
+  ],
+  "diagnostic_hypothesis": {
+    "primary": {
+      "hypothesis": "DTM*063 was omitted because sender's ERP does not map a Ship-By Date field for this order type",
+      "confidence": 0.91,
+      "evidence": "Same pattern observed in 3 prior ASNs from ACMESUPPLIER to RETAILERA in last 60 days"
+    },
+    "alternatives": [
+      {
+        "hypothesis": "DTM*011 was intended to serve as the ship date and DTM*063 was assumed redundant",
+        "confidence": 0.07
+      },
+      {
+        "hypothesis": "Segment omitted due to EDI mapping software version mismatch",
+        "confidence": 0.02
+      }
+    ]
+  },
+  "retrieval_context": {
+    "top_matches": [
+      {
+        "rank": 1,
+        "section": "RetailerA Routing Guide v2025-Q4 § 4.3 — Required DTM Segments",
+        "relevance_score": 0.96
+      },
+      {
+        "rank": 2,
+        "section": "RetailerA Chargeback Schedule 2025 — CB-0042 Missing Ship-By Date",
+        "relevance_score": 0.91
+      },
+      {
+        "rank": 3,
+        "section": "RetailerA Routing Guide v2025-Q4 § 5.1 — REF Qualifier Codes",
+        "relevance_score": 0.83
+      }
+    ]
+  },
+  "envelope": {
+    "sender_id": "ACMESUPPLIER",
+    "receiver_id": "RETAILERA",
+    "interchange_date": "260901",
+    "interchange_time": "0740",
+    "control_number": "000000002"
+  }
+}

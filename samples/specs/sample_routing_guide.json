@@ -1,0 +1,165 @@
+{
+  "partner_name": "RetailerA",
+  "version": "2025-Q4",
+  "effective_date": "2025-10-01",
+  "expires_date": "2026-03-31",
+  "contact": {
+    "team": "RetailerA Supplier Relations — EDI Compliance",
+    "portal": "https://suppliers.retailera.example.com/edi"
+  },
+  "transaction_set": "856",
+  "transaction_name": "Advance Ship Notice",
+
+  "required_segments": [
+    {
+      "segment_id": "ISA",
+      "description": "Interchange Control Header",
+      "required": true,
+      "notes": "ISA06 (Sender ID) must be your assigned RetailerA supplier ID, padded to 15 chars."
+    },
+    {
+      "segment_id": "GS",
+      "description": "Functional Group Header",
+      "required": true,
+      "notes": "GS01 must be 'SH' for Ship Notice."
+    },
+    {
+      "segment_id": "ST",
+      "description": "Transaction Set Header",
+      "required": true,
+      "qualifiers": ["856"],
+      "notes": "ST01 must be '856'."
+    },
+    {
+      "segment_id": "BSN",
+      "description": "Beginning Segment for Ship Notice",
+      "required": true,
+      "qualifiers": ["00"],
+      "notes": "BSN02 is the supplier-assigned ASN reference number. Must be unique per shipment."
+    },
+    {
+      "segment_id": "DTM",
+      "description": "Date/Time Reference — Ship Date",
+      "qualifier": "011",
+      "required": true,
+      "notes": "DTM*011 is the actual ship date. Format: YYYYMMDD. Must appear at HL shipment level."
+    },
+    {
+      "segment_id": "DTM",
+      "description": "Date/Time Reference — Ship-By Date",
+      "qualifier": "063",
+      "required": true,
+      "notes": "DTM*063 is the committed ship-by date from the purchase order. REQUIRED — omission triggers chargeback CB-0042."
+    },
+    {
+      "segment_id": "REF",
+      "description": "Reference Identification — Bill of Lading",
+      "qualifier": "BM",
+      "required": true,
+      "notes": "REF*BM is the bill of lading number. Required at shipment HL level."
+    },
+    {
+      "segment_id": "REF",
+      "description": "Reference Identification — Purchase Order",
+      "qualifier": "PO",
+      "required": true,
+      "notes": "REF*PO ties the ASN back to the originating purchase order. Required at order HL level."
+    },
+    {
+      "segment_id": "HL",
+      "description": "Hierarchical Level — Shipment",
+      "qualifier": "S",
+      "required": true,
+      "notes": "HL03='S' for Shipment. Top-level hierarchy node."
+    },
+    {
+      "segment_id": "HL",
+      "description": "Hierarchical Level — Order",
+      "qualifier": "O",
+      "required": true,
+      "notes": "HL03='O' for Order. Child of Shipment HL."
+    },
+    {
+      "segment_id": "HL",
+      "description": "Hierarchical Level — Pack",
+      "qualifier": "P",
+      "required": true,
+      "notes": "HL03='P' for Pack/Carton. Child of Order HL."
+    },
+    {
+      "segment_id": "TD1",
+      "description": "Carrier Details — Quantity and Weight",
+      "required": true,
+      "notes": "TD101 is the packaging code (e.g. CTN25). TD106 weight qualifier must be 'G' (gross)."
+    },
+    {
+      "segment_id": "TD5",
+      "description": "Carrier Details — Routing Sequence/Transit Time",
+      "required": true,
+      "notes": "TD502 must be the SCAC code of the carrier. TD503 is the carrier routing code."
+    },
+    {
+      "segment_id": "SE",
+      "description": "Transaction Set Trailer",
+      "required": true,
+      "notes": "SE01 segment count must exactly match number of segments including ST and SE."
+    },
+    {
+      "segment_id": "GE",
+      "description": "Functional Group Trailer",
+      "required": true
+    },
+    {
+      "segment_id": "IEA",
+      "description": "Interchange Control Trailer",
+      "required": true
+    }
+  ],
+
+  "ref_qualifier_whitelist": ["BM", "PO", "CO", "CR", "IL"],
+
+  "known_issues": [
+    {
+      "chargeback_code": "CB-0042",
+      "title": "Missing Ship-By Date",
+      "segment": "DTM*063",
+      "description": "DTM*063 (Ship-By Date) absent from shipment-level HL loop.",
+      "frequency": "high",
+      "penalty_range_usd": [250, 500],
+      "observed_suppliers": ["AcmeSupplier", "GlobalWidgetCo"],
+      "root_cause_pattern": "Supplier ERP does not expose a 'commit ship date' field in their EDI mapping for this order type.",
+      "recommended_fix": "Map PO line-level scheduled ship date to DTM*063 in the HL Shipment loop."
+    },
+    {
+      "chargeback_code": "CB-0077",
+      "title": "Invalid REF Qualifier",
+      "segment": "REF",
+      "description": "REF qualifier not in approved whitelist. Common offenders: ZZ, DP, L1.",
+      "frequency": "medium",
+      "penalty_range_usd": [100, 300],
+      "observed_suppliers": ["AcmeSupplier"],
+      "root_cause_pattern": "Supplier sends a generic REF*ZZ when no approved qualifier maps to their internal reference type.",
+      "recommended_fix": "Use REF*BM for bill of lading. Contact RetailerA EDI team if you need a custom qualifier approved."
+    },
+    {
+      "chargeback_code": "CB-0091",
+      "title": "ASN Sent After Ship",
+      "segment": "BSN",
+      "description": "ASN transmission timestamp (ISA09/ISA10) is more than 2 hours after BSN03 (ship date/time).",
+      "frequency": "low",
+      "penalty_range_usd": [150, 400],
+      "observed_suppliers": [],
+      "root_cause_pattern": "Manual ASN submission process introduces delay; should be automated at pick/pack confirmation.",
+      "recommended_fix": "Trigger ASN generation automatically when warehouse system confirms shipment departure."
+    }
+  ],
+
+  "validation_rules_summary": {
+    "max_hl_depth": 4,
+    "dtm_date_format": "YYYYMMDD",
+    "segment_terminator": "~",
+    "element_separator": "*",
+    "component_separator": ">",
+    "version": "004010"
+  }
+}

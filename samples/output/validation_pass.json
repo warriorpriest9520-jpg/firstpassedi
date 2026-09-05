@@ -1,0 +1,37 @@
+{
+  "document_id": "ASN20260901001",
+  "partner": "RetailerA",
+  "sender": "ACMESUPPLIER",
+  "status": "pass",
+  "timestamp": "2026-09-01T07:34:22Z",
+  "latency_seconds": 2.14,
+  "segments_checked": 13,
+  "structural_valid": true,
+  "spec_version": "RetailerA-2025-Q4",
+  "spec_days_old": 45,
+  "confidence": 0.97,
+  "routing_decision": "auto_submit",
+  "error_list": [],
+  "warnings": [],
+  "retrieval_context": {
+    "top_matches": [
+      {
+        "rank": 1,
+        "section": "RetailerA Routing Guide v2025-Q4 § 4.3 — Required DTM Segments",
+        "relevance_score": 0.94
+      },
+      {
+        "rank": 2,
+        "section": "RetailerA Routing Guide v2025-Q4 § 5.1 — REF Qualifier Codes",
+        "relevance_score": 0.88
+      }
+    ]
+  },
+  "envelope": {
+    "sender_id": "ACMESUPPLIER",
+    "receiver_id": "RETAILERA",
+    "interchange_date": "260901",
+    "interchange_time": "0734",
+    "control_number": "000000001"
+  }
+}

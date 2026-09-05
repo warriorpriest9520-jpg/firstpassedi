@@ -1,67 +1,53 @@
-# Environment
-.env
-.env.local
-.env.*.local
-*.env
-
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
+dist/
+build/
 *.egg
-MANIFEST
 
-# Virtual environments
+# Environment
+.env
 .venv/
 venv/
-ENV/
 env/
 
-# Runtime state
-.halt_state.json
-.halt_state.tmp
-logs/
-*.log
-*.jsonl
-
-# Database
-*.db
-*.sqlite3
-
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# ChromaDB local data
+chroma_data/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Test / coverage
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
+# Runtime
+*.log
+logs/
 
-# Secrets / keys
-*.pem
-*.key
-*.cert
-*.p12
+# Product files (not part of capstone demo)
+firstpass/
+demo/
+tests/
+knowledge_store/
+data/
+config/partners.json
+setup.py
+edi_pipeline_state.json
+prospects.md
+lead-tracker.md
+blog-posts.md
+cold-email-templates.md
+anonymous-channels.md
+docs/rubric_mapping.md
+docs/architecture-diagram.html
